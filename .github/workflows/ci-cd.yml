@@ -33,8 +33,7 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-
     - name: Autenticar y Subir reporte a Snyk Web
-      run: snyk sbom monitor --file=target/bom.json
+      run: snyk sbom monitor --file=target/bom.json --experimental
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
