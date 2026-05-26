@@ -25,12 +25,15 @@ jobs:
     - name: Ejecutar pruebas unitarias
       run: mvn test -DfailIfNoTests=false -Dmaven.test.failure.ignore=true
 
+    - name: Generar Reporte de Dependencias (CycloneDX)
+      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom -DskipTests
+
     - name: Configurar Snyk CLI
       uses: snyk/actions/setup@master
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
     - name: Autenticar y Subir reporte a Snyk Web
-      run: snyk monitor --all-projects
+      run: snyk monitor --file=target/bom.json
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
