@@ -25,8 +25,12 @@ jobs:
     - name: Ejecutar pruebas unitarias
       run: mvn test -DfailIfNoTests=false -Dmaven.test.failure.ignore=true
 
-    - name: Ejecutar Snyk
-      uses: snyk/actions/maven@master
-      continue-on-error: true
+    - name: Configurar Snyk CLI
+      uses: snyk/actions/setup@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    - name: Autenticar y Subir reporte a Snyk Web
+      run: snyk monitor --all-projects
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
