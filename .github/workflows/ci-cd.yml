@@ -1,7 +1,7 @@
-- name: Ejecutar Snyk para buscar vulnerabilidades
-      uses: snyk/actions/node@master  # Usamos el core de Snyk que detecta cualquier lenguaje automáticamente
+- name: Ejecutar Snyk para buscar vulnerabilidades en Java
+      uses: snyk/actions/maven@master
       continue-on-error: true 
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        command: monitor
+        args: --all-projects
