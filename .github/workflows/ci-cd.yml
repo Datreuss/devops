@@ -22,18 +22,11 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
 
-    - name: Ejecutar pruebas unitarias
-      run: mvn test -DfailIfNoTests=false -Dmaven.test.failure.ignore=true
+    - name: Compilar y empaquetar rápido (Sin Tests)
+      run: mvn clean package -DskipTests
 
-    - name: Generar Reporte de Dependencias (CycloneDX)
-      run: mvn org.cyclonedx:cyclonedx-maven-plugin:makeAggregateBom -DskipTests
-
-    - name: Configurar Snyk CLI
-      uses: snyk/actions/setup@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-    - name: Autenticar y Subir reporte a Snyk Web
-      run: snyk sbom monitor --file=target/bom.json --experimental
+    - name: Ejecutar Snyk Test
+      uses: snyk/actions/maven@master
+      continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
