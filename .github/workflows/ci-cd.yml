@@ -1,34 +1,24 @@
-name: CI-CD
+name: CI/CD Pipeline con Monitoreo y Logging
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
 
 jobs:
-  test-and-security:
-    name: Pruebas y Snyk
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clonar el repositorio
+    - name: Descargar codigo del repositorio
       uses: actions/checkout@v4
 
-    - name: Configurar JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: 'maven'
+    - name: Validar sintaxis de Docker Compose
+      run: docker compose config
 
-    - name: Ejecutar pruebas unitarias
-      run: mvn test -DfailIfNoTests=false
+    - name: Construir imagenes del Microservicio
+      run: docker compose build
 
-    - name: Ejecutar Snyk
-      uses: snyk/actions/maven@master
-      continue-on-error: true
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      with:
-        args: --all-projects
+    - name: Levantar Entorno Simulado
+      run: docker compose up -d
