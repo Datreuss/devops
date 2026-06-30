@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "🚀 Iniciando el pipeline de despliegue local..."
+echo " Iniciando el pipeline de despliegue local..."
 
 # 1. Validar la sintaxis de Docker Compose
-echo "🔍 Validando configuración de Docker Compose..."
+echo " Validando configuración de Docker Compose..."
 docker compose config
 
 if [ $? -ne 0 ]; then
@@ -12,7 +12,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 2. Construir e iniciar los contenedores
-echo "⚙️ Construyendo imágenes y levantando el entorno simulado..."
+echo " Construyendo imágenes y levantando el entorno simulado..."
 docker compose up -d --build
 
 if [ $? -eq 0 ]; then
