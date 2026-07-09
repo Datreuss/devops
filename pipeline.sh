@@ -25,3 +25,18 @@ else
     echo " Hubo un error al levantar los contenedores."
     exit 1
 fi
+
+echo "verificaciones de calidad"
+./audit.sh
+
+
+if [ $? -ne 0 ]; then
+    echo "DETECCIÓN DE FALLA CRÍTICA. El pipeline ha sido interrumpido automáticamente."
+    echo "Cancelando la construcción del contenedor para proteger el entorno productivo."
+    exit 1
+fi
+# =====================================================================
+
+
+echo "Construyendo imágenes y levantando el entorno simulado..."
+docker compose up -d --build
